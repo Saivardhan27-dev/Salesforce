@@ -1,0 +1,12 @@
+<template>
+    <lightning-combobox name="contactPicker"
+                        label="Select a Contact"
+                        value={selectedContact}
+                        placeholder="Choose a Contact"
+                        options={contactOptions}
+                        onchange={handleContactChange}>
+    </lightning-combobox>
+    <div if:true={selectedContactEmail}>
+        <p><b>Email:</b> {selectedContactEmail}</p>
+    </div>
+</template>

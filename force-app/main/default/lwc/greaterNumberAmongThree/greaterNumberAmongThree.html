@@ -1,0 +1,41 @@
+<template>
+    <lightning-card title="Greater Number Among Three" icon-name="custom:custom14">
+        <div class="slds-p-around_medium lgc-bg">
+            <lightning-input label="Enter First Number" onchange={handleFirstNumber} value={fNumber}></lightning-input>
+            <lightning-input label="Enter Second Number" onchange={handleSecondNumber} value={sNumber}></lightning-input>
+            <lightning-input label="Enter Third Number" onchange={handleThirdNumber} value={tNumber}></lightning-input>
+
+            <div class="slds-p-top_x-small">Result: {result}</div>
+        </div>
+
+        <div class="slds-p-left_x-small">
+            <lightning-button-group>
+                <div class="slds-p-around_x-small">
+                    <lightning-button label="Calculate" onclick={handleCalculate}></lightning-button>
+                </div>
+                <div class="slds-p-around_x-small">
+                    <lightning-button label="Reset" onclick={handleReset}></lightning-button>
+                </div>
+            </lightning-button-group>
+        </div>
+
+        <div class="slds-p-around_medium lgc-bg">
+            <lightning-input label="Enter First Number" onchange={handleChange} value={fNumber} name="first"></lightning-input>
+            <lightning-input label="Enter Second Number" onchange={handleChange} value={sNumber} name="second"></lightning-input>
+            <lightning-input label="Enter Third Number" onchange={handleChange} value={tNumber} name="third"></lightning-input>
+
+            <div class="slds-p-top_x-small">Result: {result}</div>
+        </div>
+
+        <div class="slds-p-left_x-small">
+            <lightning-button-group>
+                <div class="slds-p-around_x-small">
+                    <lightning-button label="Calculate" onclick={handleCalculate}></lightning-button>
+                </div>
+                <div class="slds-p-around_x-small">
+                    <lightning-button label="Reset" onclick={handleReset}></lightning-button>
+                </div>
+            </lightning-button-group>
+        </div>
+    </lightning-card>
+</template>

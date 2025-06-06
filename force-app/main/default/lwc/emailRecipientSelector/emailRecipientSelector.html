@@ -1,0 +1,40 @@
+<template>
+    <div class="email-recipient-container">
+        <!-- Search Input -->
+        <lightning-input
+            type="text"
+            label="To"
+            placeholder="Search by Name or Email..."
+            onchange={handleSearch}
+        ></lightning-input>
+
+        <!-- Dropdown Suggestions -->
+        <template if:true={showSuggestions}>
+            <ul class="suggestions">
+                <template for:each={suggestions} for:item="recipient">
+                    <li key={recipient.id} onclick={selectRecipient}>
+                        {recipient.name} &lt;{recipient.email}&gt; 
+                        <span class="type">({recipient.type})</span>
+                    </li>
+                </template>
+            </ul>
+        </template>
+
+        <!-- Selected Recipients -->
+        <template if:true={selectedRecipients.length}>
+            <div class="selected-recipients">
+                <template for:each={selectedRecipients} for:item="recipient">
+                    <span key={recipient.id} class="recipient-tag">
+                        {recipient.name} &lt;{recipient.email}&gt; 
+                        <lightning-icon 
+                            icon-name="utility:close" 
+                            size="x-small" 
+                            onclick={removeRecipient} 
+                            data-id={recipient.id}>
+                        </lightning-icon>
+                    </span>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

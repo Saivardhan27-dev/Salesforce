@@ -1,0 +1,26 @@
+<template>
+    <lightning-card title="Create and View Contact Record">
+        <lightning-layout>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-card title="Create New Contact Record">
+                    <lightning-record-edit-form object-api-name="Contact" onsuccess={createContactHandler}>
+                        <lightning-input-field field-name="Name"></lightning-input-field>
+                        <lightning-input-field field-name="Phone"></lightning-input-field>
+                        <lightning-input-field field-name="Email"></lightning-input-field>
+                        <lightning-button type="submit" name="save" label="Create Contact" variant="brand"></lightning-button>
+                    </lightning-record-edit-form>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <lightning-layout>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-card title="View Contact">
+                    <p><lightning-output-field field-name="Name"></lightning-output-field></p>
+                    <p><lightning-output-field field-name="Phone"></lightning-output-field></p>
+                    <p><lightning-output-field field-name="Email"></lightning-output-field></p>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

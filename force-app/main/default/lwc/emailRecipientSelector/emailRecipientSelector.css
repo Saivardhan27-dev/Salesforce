@@ -1,0 +1,51 @@
+.email-recipient-container {
+    position: relative;
+}
+
+.suggestions {
+    list-style: none;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+}
+
+.suggestions li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestions li:hover {
+    background: #f4f4f4;
+}
+
+.type {
+    color: gray;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.selected-recipients {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.recipient-tag {
+    background: #f4f4f4;
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.recipient-tag lightning-icon {
+    margin-left: 5px;
+    cursor: pointer;
+}

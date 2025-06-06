@@ -1,0 +1,26 @@
+<template>
+    <lightning-input 
+        label="Search Email" 
+        value={searchTerm} 
+        onchange={handleSearchChange} 
+        placeholder="Type name or email..." 
+    ></lightning-input>
+
+    <template if:true={results.length}>
+        <ul class="slds-list_dotted">
+            <template for:each={results} for:item="recipient">
+                <li key={recipient.Id} class="slds-item">
+                    <lightning-button 
+                        variant="neutral" 
+                        label={recipient.Name} 
+                        onclick={handleRecipientSelect} 
+                        data-id={recipient.Id} 
+                        data-name={recipient.Name} 
+                        data-email={recipient.Email}>
+                    </lightning-button>
+                    <span>{recipient.Email}</span>
+                </li>
+            </template>
+        </ul>
+    </template>
+</template>

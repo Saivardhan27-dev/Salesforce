@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="Create Contact Using LDS">
+        <lightning-layout>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-card title="Create a New Contact">
+                    <lightning-input name="Contact Name" label="Name" onchange={contactNameChangeHandler}></lightning-input>
+                    <lightning-input name="Contact Email" label="Email" onchange={contactEmailChangeHandler}></lightning-input>
+                    <lightning-input name="Contact Phone" label="Phone" onchange={contactPhoneChangeHandler}></lightning-input>
+                    <lightning-button label="Create Contact" onclick={createContactHandler} variant="Brand"></lightning-button>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

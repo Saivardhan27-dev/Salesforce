@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="get Contacts via Apex">
+        <template if:true={responseRecieved}>
+            <template for:each={contacts.data} for:item="contact">
+                <div key={contact.Id}>
+                    <p>Contact Name : {contact.LastName}</p>
+                    <p>Contact Phone : {contact.Phone}</p>
+                </div>
+            </template>
+        </template>
+        <template if:false={responseRecieved}>
+            <p>No data recieved</p>
+        </template>
+    </lightning-card>
+</template>

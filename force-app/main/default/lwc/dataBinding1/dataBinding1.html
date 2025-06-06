@@ -1,0 +1,9 @@
+<template>
+    <lightning-card title="Data Binding Demo1">
+        <div class="slds-m-around_medium">
+            <lightning-input name="firstName" label="First Name" onchange={changeHandler}></lightning-input>
+            <lightning-input name="lastName" label="Last Name" onchange={changeHandler}></lightning-input>
+            <p class="slds-m-top_medium">Upper cased Full Name : {upperCasedFullName}</p>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="iterator demo">
+        <ul class="slds-var-m-around_medium">
+            <template iterator:itr={ceoList}>
+                <div key={itr.value.id}>
+                    <a href="#" if:true={itr.first} class="list-group-item list-group-item-action header"><strong>Welcome</strong></a>
+
+                    <a href="#" class="list-group-item list-group-item-action"><strong>{itr.value.company}</strong> : <strong>{itr.value.name}</strong></a>
+
+                    <a href="#" if:true={itr.last} class="list-group-item list-group-item-action footer"><strong>Katham tata good bye!!</strong></a>
+                </div>
+            </template>
+        </ul>
+
+    </lightning-card>
+</template>

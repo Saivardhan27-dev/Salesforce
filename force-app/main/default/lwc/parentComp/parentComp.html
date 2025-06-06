@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Parent to child" icon-name="custom:custom25">
+        <div class="slds-var-m-around_medium">
+            <lightning-layout>
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <lightning-input label="Enter the message" onchange={handleChangeEvent}></lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item flexibility="auto" padding="around-small">
+                    <div><c-child-comp></c-child-comp></div>
+                </lightning-layout-item>
+
+            </lightning-layout>
+        </div>
+    </lightning-card>
+</template>
