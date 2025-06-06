@@ -24,4 +24,5 @@ export default class ApexImperativeWithParamsDemo extends LightningElement {
             console.error(error)
         })
     }
+    //JS
 }
