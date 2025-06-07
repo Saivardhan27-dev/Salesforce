@@ -29,5 +29,5 @@ public with sharing class OpportunityLineItemTriggerHandler {
                 System.debug('Error inserting assets: ' + e.getMessage());
             }
         }
-    }
+    } 
 }

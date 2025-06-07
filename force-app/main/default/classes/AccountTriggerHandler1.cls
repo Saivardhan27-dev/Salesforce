@@ -1,5 +1,5 @@
 /*************************************************************************************************
- * Author: Sai Vardhan
+ * Author: Sai Vardhan 
  * AccountTriggerHandler1.cls
  * Description: This class contains methods to handle various operations related to Account records.
  *              It includes methods for creating related opportunities and contacts, updating account ratings,

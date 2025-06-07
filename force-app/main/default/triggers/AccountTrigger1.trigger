@@ -43,7 +43,7 @@ trigger AccountTrigger1 on Account (before insert, after insert, before update,b
 
         AccountTriggerHandler1.updateOppStageToClosed(Trigger.new,Trigger.oldMap);
 
-        AccountTriggerHandler1.dltChildOppAndCheckCheckBoxOnContact(Trigger.new,Trigger.oldMap);        
+        AccountTriggerHandler1.dltChildOppAndCheckCheckBoxOnContact(Trigger.new,Trigger.oldMap);         
     }
     
     if(Trigger.isBefore && Trigger.isDelete){
