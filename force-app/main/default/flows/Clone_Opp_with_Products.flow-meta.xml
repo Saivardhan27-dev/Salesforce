@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <assignments>
+        <description>Add recordId opp&apos;s values to a new opp variable and change values</description>
+        <name>Assemble_New_Opp</name>
+        <label>Assemble New Opp</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>newOpp</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Opp_Info</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newOpp.StageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Prospecting</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>newOpp.CloseDate</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_New_Opp</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Modify each opp product&apos;s values - set new Opp value and blank out Total Price (because the opp product records contain Total Price and SF won&apos;t let us set Total Price, it&apos;s okay because it&apos;ll be automatically calculated by Quantity and Unit Price anyway)</description>
+        <name>Set_Current_Line_to_New_Opp</name>
+        <label>Set Current Line to New Opp</label>
+        <locationX>264</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>Loop_Opp_Products.OpportunityId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>newOpp.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Loop_Opp_Products.TotalPrice</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Opp_Prod</targetReference>
+        </connector>
+    </assignments>
+    <description>Copy an opportunity, set it to Prospecting, and copy its opp products. Run from the Clone with Products button.</description>
+    <environments>Default</environments>
+    <interviewLabel>Clone Opp with Products {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Clone Opp with Products</label>
+    <loops>
+        <description>Loop through the retrieved opp products</description>
+        <name>Loop_Opp_Products</name>
+        <label>Loop Opp Products</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <collectionReference>Get_Opp_Products</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Set_Current_Line_to_New_Opp</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>Create newOpp with the altered values</description>
+        <name>Create_New_Opp</name>
+        <label>Create New Opp</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Get_Opp_Products</targetReference>
+        </connector>
+        <inputReference>newOpp</inputReference>
+    </recordCreates>
+    <recordCreates>
+        <description>Create each opp product based on the originals</description>
+        <name>Create_Opp_Prod</name>
+        <label>Create Opp Prod</label>
+        <locationX>264</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>Loop_Opp_Products</targetReference>
+        </connector>
+        <inputReference>Loop_Opp_Products</inputReference>
+    </recordCreates>
+    <recordLookups>
+        <description>Get values from the opp ID passed into the recordId input variable</description>
+        <name>Get_Opp_Info</name>
+        <label>Get Opp Info</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assemble_New_Opp</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Retrieve all of the opp products belonging to the recordId opp</description>
+        <name>Get_Opp_Products</name>
+        <label>Get Opp Products</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Opp_Products</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OpportunityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>OpportunityLineItem</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Opp_Info</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+    <variables>
+        <name>newOpp</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
