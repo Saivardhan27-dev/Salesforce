@@ -1,4 +1,4 @@
-trigger userTrigger on User (after insert) {
+trigger userTrigger on User (after insert,after update) {
     
     if(Trigger.isAfter && Trigger.isInsert)
     {
@@ -18,5 +18,9 @@ trigger userTrigger on User (after insert) {
         {
             UserTriggerHandler.assignSalesPermissionSet(userIds);
         }
+    }
+
+    if(Trigger.isAfter && Trigger.isUpdate){
+        UserTriggerHandler.createUserChangeHistortyUponRoleChange(Trigger.new, Trigger.oldMap);
     }
 }

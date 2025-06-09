@@ -1,4 +1,4 @@
-trigger opportunityTrigger on Opportunity (before delete,after update,before update,after delete) {
+trigger opportunityTrigger on Opportunity (before delete,after update,before update,after delete,after insert) {
     
     if(Trigger.isAfter && Trigger.isDelete)
     {
@@ -59,5 +59,9 @@ trigger opportunityTrigger on Opportunity (before delete,after update,before upd
     if(Trigger.isAfter && Trigger.isUpdate)
     {
         OpportunityTriggerHandler.handleActivitiesAfterUpdate(Trigger.NEW);
+    }
+
+    if(Trigger.isAfter && Trigger.isInsert){
+        OpportunityTriggerHandler.insertForecastAfterOppInsert(Trigger.new);
     }
 }
