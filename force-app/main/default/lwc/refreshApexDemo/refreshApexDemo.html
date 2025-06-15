@@ -1,0 +1,10 @@
+<template>
+    <lightning-button label="Delete Account" onclick={deleteAccount}></lightning-button>  
+    <lightning-datatable
+        key-field="Id"
+        data = {accounts}
+        columns = {columns}
+        max-row-selection="1"
+        onrowaction={handleSelection}
+    ></lightning-datatable>
+</template>
