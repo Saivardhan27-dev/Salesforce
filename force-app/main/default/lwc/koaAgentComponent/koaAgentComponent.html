@@ -1,0 +1,81 @@
+<template>
+    <lightning-card title="KoaChat" icon-name="custom:custom19">
+        <div class="chat-header" slot="title">
+            <div class="chat-title">
+                <lightning-avatar size="small" src="/img/icon/t4v35/standard/bot_120.png" fallback-icon-name="standard:bot" alternative-text="Agentforce"></lightning-avatar>
+                <span class="slds-p-left_small">Agentforce</span>
+            </div>
+        </div>
+        
+        <div class="chat-container">
+            <!-- Chat conversation area -->
+            <div class="chat-messages-container">
+                <div class="chat-messages">
+                    <!-- Initial welcome message -->
+                    <template if:true={hasInitialMessage}>
+                        <div class="message agent-message new-sender">
+                            <div class="message-avatar">
+                                <lightning-avatar size="small" src="/img/icon/t4v35/standard/bot_120.png" fallback-icon-name="standard:bot" alternative-text="Agent"></lightning-avatar>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">Hi, I am Agentforce. How can I help you?</div>
+                                <div class="message-time">{initialMessageTime}</div>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Dynamic conversation messages -->
+                    <template for:each={responses} for:item="response">
+                        <div key={response.id} class={response.messageClass}>
+                            <template if:false={response.isUser}>
+                                <div class="message-avatar">
+                                    <lightning-avatar size="x-small" src="/img/icon/t4v35/standard/bot_120.png" fallback-icon-name="standard:bot" alternative-text="Agent"></lightning-avatar>
+                                </div>
+                            </template>
+                            <div class="message-content">
+                                <div class="message-text">{response.text}</div>
+                                <div class="message-time">{response.time}</div>
+                            </div>
+                            <template if:true={response.isUser}>
+                                <div class="message-avatar">
+                                    <lightning-avatar size="x-small" src="" fallback-icon-name="standard:user" alternative-text="User"></lightning-avatar>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Instagram-style typing indicator -->
+                <template if:true={isLoading}>
+                    <div class="typing-indicator">
+                        <div class="typing-indicator-bubble"></div>
+                        <div class="typing-indicator-bubble"></div>
+                        <div class="typing-indicator-bubble"></div>
+                        <div class="typing-text">Agentforce is typing...</div>
+                    </div>
+                </template>
+            </div>
+            
+            <!-- Instagram-style message input area -->
+            <div class="chat-input-container">
+                <lightning-input 
+                    type="text" 
+                    label="Message"
+                    variant="label-hidden"
+                    placeholder="Message..."
+                    value={message} 
+                    onchange={handleMessageChange}
+                    class="chat-input">
+                </lightning-input>
+                <lightning-button-icon 
+                    icon-name="utility:reply" 
+                    variant="brand" 
+                    onclick={handleSendMessage}
+                    disabled={isLoading}
+                    alternative-text="Send"
+                    class="send-button">
+                </lightning-button-icon>
+            </div>
+        </div>
+    </lightning-card>
+</template>
