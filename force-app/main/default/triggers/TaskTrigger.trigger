@@ -5,4 +5,9 @@ trigger TaskTrigger on Task (before insert, after insert,before delete) {
     {
         TaskTriggerHandler.preventDeletionOfTask(Trigger.old);
     }
+
+    if(trigger.isAfter && trigger.isInsert)
+    {
+        TaskTriggerHandler.setLeadStatusToContacted(Trigger.new);
+    }
 }

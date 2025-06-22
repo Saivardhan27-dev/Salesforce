@@ -2,7 +2,8 @@ trigger ContactTrigger on Contact (before insert,after update) {
 
     if(Trigger.isInsert && Trigger.isBefore)
     {
-        ContactTriggerHandler.handleBeforeInsert(Trigger.NEW);       
+        ContactTriggerHandler.handleBeforeInsert(Trigger.NEW);    
+        ContactTriggerHandler.PreventDuplicateContactsByEmail(Trigger.NEW);
     }
     
     if(trigger.isAfter && trigger.isUpdate)
@@ -14,4 +15,5 @@ trigger ContactTrigger on Contact (before insert,after update) {
     {
         ContactTriggerHandler.handleAfterInsert(Trigger.new);
     }
+
 }
