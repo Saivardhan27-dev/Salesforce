@@ -124,4 +124,31 @@ public class OpportunityTriggerHandler {
             }
         }
     }
+
+    /**********
+    * @description
+    * This method is used to set the Account Type to 'High Value' if the Opportunity Amount is greater than 1 lakh.
+    ***********/
+    public static void setAccTypeHighIfOppGT1lakh(List<Opportunity> oppRecords){
+
+        Set<Id> accountIds = new Set<Id>();
+        for(Opportunity opp : oppRecords){
+            if(opp.Amount > 100000){
+                accountIds.add(opp.AccountId);
+            }
+        }
+
+        if(!accountIds.isEmpty()){
+            List<Account> accRecords = [SELECT Id, Type FROM Account WHERE Id IN: accountIds];
+            for(Account acc : accRecords){
+                acc.Type = 'High Value';
+            }
+            try{
+                update accRecords;
+            }
+            catch(Exception e){
+                System.debug('Error while updating '+e.getMessage());
+            }
+        }
+    }
 }
