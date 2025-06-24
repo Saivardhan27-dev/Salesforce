@@ -151,4 +151,67 @@ public class OpportunityTriggerHandler {
             }
         }
     }
+
+    /**********
+    * @description
+    * This method is used to assign Opportunities with Amount greater than 50,000 to the Sales Manager.
+    * It also creates a Task for the Sales Manager to follow up with the high-value lead.
+    * If the Opportunity is in 'Closed Won' stage, it updates the Account Type to 'Premium Customer'.
+    ***********/
+    public static void assignOppToSalesManager(List<Opportunity> oppRecords){
+        
+        List<Task> tasksToInsert = new List<Task>();
+        List<Opportunity> oppsToUpdate = new List<Opportunity>();
+        Set<Account> accIds = new Set<Account>();
+        Id salesManagerId = [SELECT Id FROM User WHERE Profile.Name = 'Sales Manager' LIMIT 1].Id;
+        for(Opportunity opp : oppRecords){
+            if(opp.Amount > 50000 && opp.OwnerId != salesManagerId){
+                opp.OwnerId = salesManagerId;
+                oppsToUpdate.add(opp);
+                
+                Task tsk = new Task();
+                tsk.WhatId = opp.Id;
+                tsk.Subject = 'Follow-up with high-Value lead';
+                tsk.Priority = 'High';
+                Status = 'Not Started';
+                ActivityDate = System.today().addDays(1);
+                tasksToInsert.add(tsk);
+                
+                if(opp.StageName == 'Closed Won'){
+                    accIds.add(opp.AccountId);
+                }
+            }
+        }
+
+        if(!oppsToUpdate.isEmpty()){
+            try{
+                update oppsToUpdate;
+            } catch(Exception e) {
+                System.debug('Error while updating opportunities: ' + e.getMessage());
+            }
+        }
+
+        if(!tasksToInsert.isEmpty()){
+            try{
+                insert tasksToInsert;
+            } catch(Exception e) {
+                System.debug('Error while inserting tasks: ' + e.getMessage());
+            }
+        }
+
+        if(!accIds.isEmpty()){
+            List<Account> accountsToUpdate = [SELECT Id, Type FROM Account WHERE Id IN: accIds];
+            for(Account acc : accountsToUpdate){
+                acc.Type = 'Premium Customer';
+            }
+            
+            if(!accountsToUpdate.isEmpty()){
+                try{
+                    update accountsToUpdate;
+                } catch(Exception e) {
+                    System.debug('Error while updating accounts: ' + e.getMessage());
+                }   
+            }
+        }
+    }
 }

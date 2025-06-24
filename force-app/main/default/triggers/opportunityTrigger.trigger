@@ -31,5 +31,6 @@ trigger opportunityTrigger on Opportunity (before delete,after update,before upd
     if(Trigger.isAfter && Trigger.isInsert){
         OpportunityTriggerHandler.insertForecastAfterOppInsert(Trigger.new);
         OpportunityTriggerHandler.setAccTypeHighIfOppGT1lakh(Trigger.new);
+        OpportunityTriggerHandler.assignOppToSalesManager(Trigger.new);
     }
 }
