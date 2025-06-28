@@ -32,4 +32,24 @@ public class LeadTriggerHandler {
         }
     }
     
+    public static void LogChangesOnLeadUpdate(List<Lead> leadRecords, Map<Id, Lead> oldMap){
+        List<Change_Log__c> logsToInsert = new List<Change_Log__c>();
+        if(!leadRecords.isEmpty()){
+            for(Lead leadRec : leadRecords){
+                if(leadRec.Status != oldMap.get(leadRec.Id).Status){
+                    Change_Log__c changeLog = new Change_Log__c();
+                    changeLog.Which_Object__c = 'Lead';
+                    changeLog.RecordId__c = leadRec.Id;
+                    changeLog.Field_Changed__c = 'Status';
+                    changeLog.Old_Value__c = oldMap.get(leadRec.Id).Status;
+                    changeLog.New_Value__c = leadRec.Status;
+                    logsToInsert.add(changeLog);
+                }
+            }
+        }
+
+        if(!logsToInsert.isEmpty()){
+            insert logsToInsert;
+        }
+    }
 }

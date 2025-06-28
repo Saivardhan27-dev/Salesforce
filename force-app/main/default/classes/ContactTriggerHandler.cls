@@ -95,4 +95,30 @@ public class ContactTriggerHandler {
             }
         }
     }
+
+    public static void updateAccountLastContactedDate(List<Contact> newRecords){
+	
+        List<Account> accListToUpdate = new List<Account>();
+        Set<Account> accIds = new Set<Account>();
+        if(!newRecords.isEmpty()){
+            for(Contact con : newRecords){
+                if(con.AccountId != null){
+                    accIds.add(con.AccountId);
+                }
+            }
+        }
+        
+        if(!accIds.isEmpty()){
+            for(Id accId : accIds){
+                Account acc = new Account();
+                acc.Id = accId;
+                acc.Last_Contacted_Date__c = Date.TODAY();
+                accListToUpdate.add(acc);
+            }
+        }
+        
+        if(!accListToUpdate.isEmpty()){
+            update accListToUpdate;
+        }
+    }
 }

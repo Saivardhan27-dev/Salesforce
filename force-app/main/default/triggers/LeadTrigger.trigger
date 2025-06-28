@@ -1,4 +1,4 @@
-trigger LeadTrigger on Lead (before update, after insert,before delete) {
+trigger LeadTrigger on Lead (before update, after insert,before delete, after update) {
     
     if(Trigger.isDelete && Trigger.isBefore)
     {
@@ -31,5 +31,8 @@ trigger LeadTrigger on Lead (before update, after insert,before delete) {
     {
         LeadTriggerHandler.handleActivitiesAfterInsert(Trigger.new);
     }
-    
+
+    if(Trigger.isUpdate && Trigger.isAfter){
+        LeadTriggerHandler.LogChangesOnLeadUpdate(Trigger.new, Trigger.oldMap);
+    }
 }

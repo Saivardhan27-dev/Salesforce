@@ -214,4 +214,58 @@ public class OpportunityTriggerHandler {
             }
         }
     }
+
+    /**********
+    * @description
+    * You need to ensure that each Opportunity has at least one Product before it can be closed as 'Closed Won'.
+    ***********/
+    public static void checkProductsBefClosedWon(List<Opportunity> newRecords, Map<Id, Opportunity> oldMap){){
+
+        if(!newRecords.isEmpty()){
+            for(Opportunity opp : newRecords){
+                if(opp.StageName = 'Closed Won' && oldMap.get(opp.Id).StageName != 'Closed Won'){
+                    if(opp.HasOpportunityLineItem == true){
+                        continue;
+                    }
+                    else{
+                        // Reverting the StageName to the old value and adding an error message
+                        opp.StageName = oldMap.get(opp.Id).StageName;
+                        opp.addError('Cannot close the Opportunity as closed won without atleast one product');
+                    }
+                }
+            }
+        }
+    }
+
+    //Soultion2 for the above method
+    public static void checkProductsBefClosedWonSol2(List<Opportunity> newRecords, Map<Id, Opportunity> oldMap){
+        Set<Id> opportunityIds = new Set<Id>();
+        if(!newRecords.isEmpty()){
+            for(Opportunity opp : newRecords){
+                if(opp.StageName == 'Closed Won' && oldMap.get(opp.Id).StageName != 'StageName'){
+                    opportunityIds.add(opp.Id);
+                }
+            }
+        }
+        
+        Map<Id,Integer> productCountMap = new Map<Id,Integer>();
+        for(OpportunityLineItem oli : [SELECT OpportunityId FROM OpportunityLineItem WHERE OpportunityId IN : opportunityIds]){
+            if(!productCountMap.containsKey(oli.OpportunityId)){
+                productCountMap.put(oli.OpportunityId, 1);
+            }
+            else{
+                productCountMap.put(oli.OpportunityId, productCountMap.get(oli.OpportunityId) + 1);
+            }
+        }
+
+        for(Opportunity opp : newRecords){
+            if(opp.StageName == 'Closed Won' && oldMap.get(opp.Id).StageName != 'Closed Won'){
+                if(!productCountMap.containsKey(opp.Id) || productCountMap.get(opp.Id) == 0){
+                    // Reverting the StageName to the old value and adding an error message
+                    opp.StageName = oldMap.get(opp.Id).StageName;
+                    opp.addError('Cannot close the Opportunity as closed won without at least one product');
+                }   
+            }
+        }
+    }
 }

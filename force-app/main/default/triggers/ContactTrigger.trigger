@@ -14,6 +14,7 @@ trigger ContactTrigger on Contact (before insert,after update) {
     if(trigger.isAfter && trigger.isInsert)
     {
         ContactTriggerHandler.handleAfterInsert(Trigger.new);
+        ContactTriggerHandler.updateAccountLastContactedDate(Trigger.new);
     }
 
 }

@@ -19,4 +19,9 @@ trigger CaseTrigger on Case (before insert) {
     {
         CaseTriggerHandler.handleBeforeDelete(Trigger.old);
     }
+
+    if(Trigger.isAfter && Trigger.isInsert){
+        CaseTriggerHandler.createFollowUpTaskOrEscalateCase(Trigger.new, Trigger.oldMap);
+        CaseTriggerHandler.sendEmailWhenCaseEscalated(Trigger.new, Trigger.oldMap);
+    }
 }

@@ -21,6 +21,7 @@ trigger opportunityTrigger on Opportunity (before delete,after update,before upd
     if(Trigger.isBefore && Trigger.isUpdate)
     {
         OpportunityTriggerHandler.handleActivitiesBeforeUpdate(Trigger.NEW, Trigger.OldMap);
+        OpportunityTriggerHandler.checkProductsBefClosedWon(Trigger.new, Trigger.oldMap);
     }
     
     if(Trigger.isAfter && Trigger.isUpdate)

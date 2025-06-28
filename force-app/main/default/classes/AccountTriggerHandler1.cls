@@ -410,4 +410,38 @@ public class AccountTriggerHandler1 {
             }
         }
     }
+
+    /***********
+     * description:
+     * This method updates the description of related contacts with the account description when the account description is changed.
+     **********/
+    public static void updateRelatedConDesc(List<Account> accRecords, Map<Id, Account> oldMapRecords){
+        List<Contact> conListToUpdate = new List<Contact>();
+        Set<Id> accIds = new Set<Id>();
+        if(!accRecords.isEmpty()){
+            for(Account acc : accRecords){
+                if(acc.Description != oldMapRecords.get(acc.Id).Description){
+                    accIds.add(acc.Id);
+                }
+            }
+        }
+
+        List<Contact> conList = [SELECT Id, Description, AccountId FROM Contact WHERE AccountId IN :accIds];
+        if(!conList.isEmpty()){
+            for(Contact con : conList){
+                con.Description = con.Account.Description;
+                conListToUpdate.add(con);
+            }
+        }
+
+        if(!conListToUpdate.isEmpty()){
+            try{
+                update conListToUpdate;
+            } catch (DmlException e) {
+                System.debug('Error updating contacts: ' + e.getMessage());
+            }
+        }
+    }
+
+    
 }
