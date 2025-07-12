@@ -1,7 +1,7 @@
 public with sharing class KoaAgentInvoker {
    @AuraEnabled(cacheable=false)
    public static Map<String, String> invokeAgentKoaMethod(String message, String sessionId) {
-       Invocable.Action action = Invocable.Action.createCustomAction('generateAiAgentResponse','Koa_Cars');
+       Invocable.Action action = Invocable.Action.createCustomAction('generateAiAgentResponse','Koa_Cars_Service_Agent');
         action.setInvocationParameter('userMessage', message);
        if (String.isNotBlank(sessionId)) {
            action.setInvocationParameter('sessionId', sessionId);
