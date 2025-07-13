@@ -1,8 +1,9 @@
-trigger opportunityTrigger on Opportunity (before delete,after update,before update,after delete,after insert) {
+trigger opportunityTrigger on Opportunity (before delete,after update,before update,after delete,after insert,after undelete) {
     
     if(Trigger.isAfter && Trigger.isDelete)
     {
           OpportunityTriggerHandler.handleActivitiesAfterDelete(Trigger.old);
+          OpportunityTriggerHandler.updateOpenClosedOppCount(null, Trigger.oldMap);
     }
     
     if(Trigger.isBefore && Trigger.isDelete)
@@ -27,11 +28,18 @@ trigger opportunityTrigger on Opportunity (before delete,after update,before upd
     if(Trigger.isAfter && Trigger.isUpdate)
     {
         OpportunityTriggerHandler.handleActivitiesAfterUpdate(Trigger.NEW);
+        OpportunityTriggerHandler.updateOpenClosedOppCount(Trigger.new, Trigger.oldMap);
     }
 
     if(Trigger.isAfter && Trigger.isInsert){
         OpportunityTriggerHandler.insertForecastAfterOppInsert(Trigger.new);
         OpportunityTriggerHandler.setAccTypeHighIfOppGT1lakh(Trigger.new);
         OpportunityTriggerHandler.assignOppToSalesManager(Trigger.new);
+        OpportunityTriggerHandler.updateOpenClosedOppCount(Trigger.new, null);
     }
+
+    if(Trigger.isAfter && Trigger.isUndelete){
+        OpportunityTriggerHandler.updateOpenClosedOppCount(Trigger.new, null);
+    }
+
 }

@@ -268,4 +268,64 @@ public class OpportunityTriggerHandler {
             }
         }
     }
+
+    /*********
+     * @Description
+     * On account there are two fields, open opportunity and closed opportunity. 
+     * You have to write a trigger on opportunity that every time a new opportunity is created or is updated, 
+     * We'll have to populate the number of opportunities open and number of closed opportunities on account. 
+     * Let's say if any opportunity is closed, then this will remove one from open opportunity and will add one in the closed opportunity field on account.
+     **********/
+
+     public static void updateOpenOpportunitiesCount(List<Opportunity> oppRecords, Map<Id, Opportunity> oldMapRecords){
+        Set<Id> accountIds = new Set<Id>();
+
+        if(!oppRecords.isEmpty()){
+            for(Opportunity opp : oppRecords){
+                if(opp.AccountId != null){
+                    accountIds.add(opp.AccountId);  
+                }
+            }
+        }
+
+        if(!oldMapRecords.isEmpty()){
+            for(Opportunity opp : oldMapRecords.values()){
+                if(opp.AccountId != null){
+                    accountIds.add(opp.AccountId);
+                }
+            }
+        }
+
+        Set<String> closedStages = new Set<String>({'Closed Won','Closed Lost'});
+
+        List<Opportunity> opps = [SELECT Id, StageName, AccountId FROM Opportunity WHERE AccountId IN :accountIds];
+
+        Map<Id, Integer> openMap = new Map<Id, Integer>();
+        Map<Id, Integer> closedMap = new Map<Id, Integer>();
+
+        for(Opportunity opp : opps){
+            if(closedStages.contains(opp.StageName)){
+                closedMap.put(opp.AccountId, closedMap.getOrDefault(opp.AccountId, 0)+1);
+            }
+            else{
+                openMap.put(opp.AccountId, openMap.getOrDefault(opp.AccountId,0)+1);
+            }
+        }
+
+        List<Account>  accsToUpdate = new List<Account>();
+        
+        for(Id accId : accountIds){
+            Account acc = new Account();
+            acc.Id = accId;
+            acc.Open_Opportunities__c = openMap.getOrDefault(accId, 0);
+            acc.Closed_Opportunites__c = closedMap.getOrDefault(accId, 0);
+            accsToUpdate.add(acc);
+        }
+
+        if(!accsToUpdate.isEmpty()){
+            update accsToUpdate;
+        }
+     }
+
+     
 }
